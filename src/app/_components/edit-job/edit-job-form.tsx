@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { insertJobSchema } from "@/server/db/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React from 'react';
+import { insertJobSchema, type job } from '@/server/db/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
 import {
   Form,
   FormControl,
@@ -12,20 +12,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
+} from '@/app/_components/ui/form';
+import { Input } from '@/app/_components/ui/input';
+import { Button } from '@/app/_components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
-import { editJob } from "@/app/actions";
-import { useRouter } from "next/navigation";
-import { InferSelectModel } from "drizzle-orm";
-import { job } from "@/server/db/schema";
+} from '@/app/_components/ui/select';
+import { editJob } from '@/app/actions';
+import { useRouter } from 'next/navigation';
+import { type InferSelectModel } from 'drizzle-orm';
 
 export type EditJobFormProps = {
   job: InferSelectModel<typeof job>;
@@ -38,15 +37,15 @@ export function EditJobForm({ job, afterUpdate }: EditJobFormProps) {
     resolver: zodResolver(insertJobSchema),
     defaultValues: {
       title: job.title,
-      location: job.location ?? "",
-      salary: job.salary ?? "",
+      location: job.location ?? '',
+      salary: job.salary ?? '',
       salaryfrequency: job.salaryfrequency,
-      description: job.description ?? "",
+      description: job.description ?? '',
     },
   });
 
-  const onSubmit = (values: z.input<typeof insertJobSchema>) => {
-    editJob(job.id, values);
+  const onSubmit = async (values: z.input<typeof insertJobSchema>) => {
+    await editJob(job.id, values);
     router.refresh();
     afterUpdate?.();
   };
@@ -110,7 +109,7 @@ export function EditJobForm({ job, afterUpdate }: EditJobFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {["hourly", "weekly", "bi-weekly", "monthly", "yearly"].map(
+                    {['hourly', 'weekly', 'bi-weekly', 'monthly', 'yearly'].map(
                       (freq) => (
                         <SelectItem key={freq} value={freq}>
                           {freq}

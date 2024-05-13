@@ -1,13 +1,13 @@
-import { Button } from "@/app/_components/ui/button";
+import React from 'react';
+import { Button } from '@/app/_components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import React from "react";
-import { CreateJobForm } from "./create-job-form";
+} from '@/app/_components/ui/dialog';
+import { CreateJobForm } from './create-job-form';
 
 export function CreateJobButton() {
   const [isOpen, setIsOpen] = React.useState(false);

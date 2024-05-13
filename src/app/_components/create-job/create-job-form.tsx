@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { insertJobSchema } from "@/server/db/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { insertJobSchema } from '@/server/db/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
 import {
   Form,
   FormControl,
@@ -11,18 +11,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
+} from '@/app/_components/ui/form';
+import { Input } from '@/app/_components/ui/input';
+import { Button } from '@/app/_components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
-import { createJob } from "@/app/actions";
-import { useRouter } from "next/navigation";
+} from '@/app/_components/ui/select';
+import { createJob } from '@/app/actions';
+import { useRouter } from 'next/navigation';
 
 export type CreateJobFormProps = {
   afterCreate?: () => void;
@@ -33,16 +33,16 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
   const form = useForm<z.input<typeof insertJobSchema>>({
     resolver: zodResolver(insertJobSchema),
     defaultValues: {
-      title: "",
-      location: "",
-      salary: "",
-      salaryfrequency: "yearly",
-      description: "",
+      title: '',
+      location: '',
+      salary: '',
+      salaryfrequency: 'yearly',
+      description: '',
     },
   });
 
-  const onSubmit = (values: z.input<typeof insertJobSchema>) => {
-    createJob(values);
+  const onSubmit = async (values: z.input<typeof insertJobSchema>) => {
+    await createJob(values);
     router.refresh();
     afterCreate?.();
   };
@@ -106,7 +106,7 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {["hourly", "weekly", "bi-weekly", "monthly", "yearly"].map(
+                    {['hourly', 'weekly', 'bi-weekly', 'monthly', 'yearly'].map(
                       (freq) => (
                         <SelectItem key={freq} value={freq}>
                           {freq}

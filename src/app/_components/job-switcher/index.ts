@@ -1,2 +1,2 @@
-export * from "./job-switcher"
-export * from "./job-switcher-container"
+export * from './job-switcher';
+export * from './job-switcher-container';

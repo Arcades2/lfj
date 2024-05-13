@@ -12,7 +12,6 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 /**
@@ -30,9 +29,15 @@ export const job = createTable(
     title: varchar("title", { length: 256 }).notNull(),
     location: varchar("location", { length: 256 }),
     salary: numeric("salary", {
-      precision: 100, scale: 2
+      precision: 100,
+      scale: 2,
     }),
-    salaryfrequency: varchar("salary_frequency", { length: 256, enum: ["hourly", "weekly", "bi-weekly", "monthly", "yearly"] }).default("yearly").notNull(),
+    salaryfrequency: varchar("salary_frequency", {
+      length: 256,
+      enum: ["hourly", "weekly", "bi-weekly", "monthly", "yearly"],
+    })
+      .default("yearly")
+      .notNull(),
     description: varchar("description", { length: 512 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -41,38 +46,50 @@ export const job = createTable(
   },
   (table) => ({
     title: index("title_idx").on(table.title),
-  })
+  }),
 );
 
 export const insertJobSchema = z.object({
   title: z.string().min(1),
-  location: z.string().min(1).optional().or(z.literal("")).transform((val) => val === "" ? undefined : val),
-  salary: z.string().optional().superRefine((val, ctx) => {
-    if (!val) {
-      return;
-    }
+  location: z
+    .string()
+    .min(1)
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => (val === "" ? undefined : val)),
+  salary: z
+    .string()
+    .optional()
+    .superRefine((val, ctx) => {
+      if (!val) {
+        return;
+      }
 
-    if (isNaN(parseFloat(val))) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Salary must be a number",
-      });
-    }
+      if (Number.isNaN(parseFloat(val))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Salary must be a number",
+        });
+      }
 
-    if (parseFloat(val) < 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Salary must be a positive number",
-      });
-    }
-  }).transform((val) => val === "" ? undefined : val),
-  salaryfrequency: z.enum(["hourly", "weekly", "bi-weekly", "monthly", "yearly"]).default("yearly"),
-  description: z.string().min(1).optional().or(z.literal("")).transform((val) => val === "" ? undefined : val),
-})
-
-export const jobRelations = relations(job, ({ many }) => ({
-  offers: many(offer)
-}))
+      if (parseFloat(val) < 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Salary must be a positive number",
+        });
+      }
+    })
+    .transform((val) => (val === "" ? undefined : val)),
+  salaryfrequency: z
+    .enum(["hourly", "weekly", "bi-weekly", "monthly", "yearly"])
+    .default("yearly"),
+  description: z
+    .string()
+    .min(1)
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => (val === "" ? undefined : val)),
+});
 
 export const offer = createTable(
   "offer",
@@ -83,9 +100,13 @@ export const offer = createTable(
     foundOn: varchar("found_on", { length: 256 }),
     location: varchar("location", { length: 256 }),
     salary: numeric("salary", {
-      precision: 100, scale: 2
+      precision: 100,
+      scale: 2,
     }),
-    salaryfrequency: varchar("salary_frequency", { length: 256, enum: ["hourly", "weekly", "bi-weekly", "monthly", "yearly"] }),
+    salaryfrequency: varchar("salary_frequency", {
+      length: 256,
+      enum: ["hourly", "weekly", "bi-weekly", "monthly", "yearly"],
+    }),
     firstContactDate: timestamp("first_contact_date", { withTimezone: true }),
     notes: varchar("notes", { length: 512 }),
     declined: boolean("declined").default(false),
@@ -97,12 +118,16 @@ export const offer = createTable(
   },
   (table) => ({
     companyIndex: index("company_idx").on(table.company),
-  })
+  }),
 );
+
+export const jobRelations = relations(job, ({ many }) => ({
+  offers: many(offer),
+}));
 
 export const offerRelations = relations(offer, ({ one }) => ({
   job: one(job, {
     fields: [offer.jobId],
     references: [job.id],
-  })
-}))
+  }),
+}));

@@ -1,5 +1,5 @@
-import { db } from "@/server/db";
-import { EditJobButton } from "@/app/_components/edit-job";
+import { db } from '@/server/db';
+import { EditJobButton } from '@/app/_components/edit-job';
 
 export default async function JobPage({
   params,
@@ -23,8 +23,8 @@ export default async function JobPage({
       <div className="flex items-center gap-2">
         <h1 className="text-2xl">
           {job.title}
-          {job.location ? ` | ${job.location}` : ""}
-          {job.salary ? ` | ${job.salary}/${job.salaryfrequency}` : ""}
+          {job.location ? ` | ${job.location}` : ''}
+          {job.salary ? ` | ${job.salary}/${job.salaryfrequency}` : ''}
         </h1>
         <EditJobButton job={job} />
       </div>

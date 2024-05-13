@@ -1,17 +1,18 @@
-"use client";
+'use client';
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import React from "react";
-import { Button } from "@/app/_components/ui/button";
-import { CiEdit } from "react-icons/ci";
-import { InferSelectModel } from "drizzle-orm";
-import { job } from "@/server/db/schema";
-import { EditJobForm } from "./edit-job-form";
+} from '@/app/_components/ui/dialog';
+import React from 'react';
+import { Button } from '@/app/_components/ui/button';
+import { CiEdit } from 'react-icons/ci';
+import { type InferSelectModel } from 'drizzle-orm';
+import { type job } from '@/server/db/schema';
+import { EditJobForm } from './edit-job-form';
 
 export type EditJobButtonProps = {
   job: InferSelectModel<typeof job>;
