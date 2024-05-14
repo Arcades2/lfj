@@ -1,6 +1,11 @@
 'use server';
 
-import { insertJobSchema, job } from '@/server/db/schema';
+import {
+  insertJobSchema,
+  insertJobOfferSchema,
+  job,
+  offer,
+} from '@/server/db/schema';
 import { db } from '@/server/db';
 import { type z } from 'zod';
 import { eq } from 'drizzle-orm';
@@ -16,4 +21,12 @@ export async function editJob(
 ) {
   const data = insertJobSchema.parse(jobInfo);
   await db.update(job).set(data).where(eq(job.id, jobId));
+}
+
+export async function createJobOffer(
+  jobOfferInfo: z.input<typeof insertJobOfferSchema>,
+) {
+  const data = insertJobOfferSchema.parse(jobOfferInfo);
+
+  await db.insert(offer).values(data);
 }

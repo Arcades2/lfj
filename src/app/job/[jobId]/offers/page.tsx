@@ -1,5 +1,6 @@
 import { db } from '@/server/db';
 import { EditJobButton } from '@/app/_components/edit-job';
+import { CreateJobOfferButton } from '@/app/_components/create-job-offer';
 
 export default async function JobPage({
   params,
@@ -29,6 +30,7 @@ export default async function JobPage({
         <EditJobButton job={job} />
       </div>
       {job.description && <p className="italic">{job.description}</p>}
+      <CreateJobOfferButton jobId={job.id} />
     </main>
   );
 }

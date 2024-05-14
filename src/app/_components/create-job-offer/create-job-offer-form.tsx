@@ -1,6 +1,6 @@
 'use client';
 
-import { insertJobSchema } from '@/server/db/schema';
+import { insertJobOfferSchema } from '@/server/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
@@ -22,27 +22,46 @@ import {
   SelectValue,
 } from '@/app/_components/ui/select';
 import { useRouter } from 'next/navigation';
-import { createJob } from '@/server/actions';
+import { Calendar } from '@/app/_components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/app/_components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { CalendarIcon } from '@radix-ui/react-icons';
+import { Textarea } from '@/app/_components/ui/textarea';
+import { createJobOffer } from '@/server/actions';
 
-export type CreateJobFormProps = {
+export type CreateJobOfferFormProps = {
+  jobId: number;
   afterCreate?: () => void;
 };
 
-export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
+export function CreateJobOfferForm({
+  afterCreate,
+  jobId,
+}: CreateJobOfferFormProps) {
   const router = useRouter();
-  const form = useForm<z.input<typeof insertJobSchema>>({
-    resolver: zodResolver(insertJobSchema),
+  const form = useForm<z.input<typeof insertJobOfferSchema>>({
+    resolver: zodResolver(insertJobOfferSchema),
     defaultValues: {
-      title: '',
+      company: '',
+      foundOn: '',
+      jobId,
+      phone: '',
       location: '',
       salary: '',
       salaryfrequency: 'yearly',
-      description: '',
+      firstContactDate: new Date(),
+      notes: '',
+      declined: false,
     },
   });
 
-  const onSubmit = async (values: z.input<typeof insertJobSchema>) => {
-    await createJob(values);
+  const onSubmit = async (values: z.input<typeof insertJobOfferSchema>) => {
+    await createJobOffer(values);
     router.refresh();
     afterCreate?.();
   };
@@ -55,13 +74,53 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
       >
         <FormField
           control={form.control}
-          name="title"
+          name="company"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>
+                Company<span className="text-destructive"> *</span>
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="firstContactDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>First contact date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -72,6 +131,19 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Location</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="foundOn"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Found on</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -125,10 +197,10 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
         </div>
         <FormField
           control={form.control}
-          name="description"
+          name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Phone</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -136,8 +208,21 @@ export function CreateJobForm({ afterCreate }: CreateJobFormProps) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea {...field} className="resize-zone" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="mt-4 ">
-          Create job
+          Create job offer
         </Button>
       </form>
     </Form>

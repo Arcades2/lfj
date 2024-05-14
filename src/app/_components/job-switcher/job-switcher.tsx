@@ -25,7 +25,7 @@ export function JobSwitcher({ jobs }: JobSwitcherProps) {
       <Select
         defaultValue={params.jobId}
         onValueChange={(jobId) => {
-          router.push(`/job/${jobId}`);
+          router.push(`/job/${jobId}/offers`);
         }}
       >
         <SelectTrigger className="w-[280px]">

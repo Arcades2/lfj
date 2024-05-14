@@ -9,23 +9,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/app/_components/ui/dialog';
-import { CreateJobForm } from './create-job-form';
+import { CreateJobOfferForm } from './create-job-offer-form';
 
-export function CreateJobButton() {
+export type CreateJobOfferButtonProps = {
+  jobId: number;
+};
+
+export function CreateJobOfferButton({ jobId }: CreateJobOfferButtonProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="mx-auto mt-4" size="lg">
-          Create a job project
+          Add a job offer
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create your job project</DialogTitle>
+          <DialogTitle>Add a job offer</DialogTitle>
         </DialogHeader>
-        <CreateJobForm afterCreate={() => setIsOpen(false)} />
+        <CreateJobOfferForm
+          afterCreate={() => setIsOpen(false)}
+          jobId={jobId}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -22,9 +22,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/app/_components/ui/select';
-import { editJob } from '@/app/actions';
 import { useRouter } from 'next/navigation';
 import { type InferSelectModel } from 'drizzle-orm';
+import { editJob } from '@/server/actions';
 
 export type EditJobFormProps = {
   job: InferSelectModel<typeof job>;
