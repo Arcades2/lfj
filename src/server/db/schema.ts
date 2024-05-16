@@ -103,7 +103,7 @@ export const offer = createTable(
       precision: 100,
       scale: 2,
     }),
-    salaryfrequency: varchar('salary_frequency', {
+    salaryFrequency: varchar('salary_frequency', {
       length: 256,
       enum: ['hourly', 'weekly', 'bi-weekly', 'monthly', 'yearly'],
     }),
@@ -164,7 +164,7 @@ export const insertJobOfferSchema = z.object({
       }
     })
     .transform((val) => (val === '' ? undefined : val)),
-  salaryfrequency: z
+  salaryFrequency: z
     .enum(['hourly', 'weekly', 'bi-weekly', 'monthly', 'yearly'])
     .default('yearly'),
   firstContactDate: z.date().optional(),
@@ -182,9 +182,32 @@ export const jobRelations = relations(job, ({ many }) => ({
   offers: many(offer),
 }));
 
-export const offerRelations = relations(offer, ({ one }) => ({
+export const followUp = createTable('follow_up', {
+  id: serial('id').primaryKey(),
+  date: timestamp('date', { withTimezone: true }).notNull(),
+  event_type: varchar('event_type', {
+    length: 256,
+    enum: ['phone', 'email', 'in-person', 'other'],
+  }).notNull(),
+  details: varchar('details', { length: 512 }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updatedAt', { withTimezone: true }),
+  offerId: integer('offer_id').notNull(),
+});
+
+export const followUpRelations = relations(followUp, ({ one }) => ({
+  offer: one(offer, {
+    fields: [followUp.offerId],
+    references: [offer.id],
+  }),
+}));
+
+export const offerRelations = relations(offer, ({ one, many }) => ({
   job: one(job, {
     fields: [offer.jobId],
     references: [job.id],
   }),
+  followUps: many(followUp),
 }));

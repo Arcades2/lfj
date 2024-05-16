@@ -15,7 +15,9 @@ export default async function HomePage() {
       <h1 className="text-center text-5xl">
         {jobQuery[0]?.count ? 'Select a job first or' : 'Create a job first'}
       </h1>
-      <CreateJobButton />
+      <div className="mx-auto mt-4">
+        <CreateJobButton />
+      </div>
     </main>
   );
 }

@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/app/_components/ui/dialog';
+import { IoIosAdd } from 'react-icons/io';
 import { CreateJobOfferForm } from './create-job-offer-form';
 
 export type CreateJobOfferButtonProps = {
@@ -21,8 +22,9 @@ export function CreateJobOfferButton({ jobId }: CreateJobOfferButtonProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="mx-auto mt-4" size="lg">
-          Add a job offer
+        <Button size="lg" className="flex gap-2 items-center">
+          <IoIosAdd className="text-2xl" />
+          <span>Add a job offer</span>
         </Button>
       </DialogTrigger>
       <DialogContent>

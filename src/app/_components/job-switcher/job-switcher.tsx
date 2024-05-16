@@ -8,6 +8,7 @@ import {
   SelectItem,
 } from '@/app/_components/ui/select';
 import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
 
 export type JobSwitcherProps = {
   jobs: Array<{

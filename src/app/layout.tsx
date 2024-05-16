@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 
 import { Fira_Code } from 'next/font/google';
 import { JobSwitcherContainer } from '@/app/_components/job-switcher';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Looking for jobs',
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body className="min-h-screen">
         <header className="border-b-oxford border py-2">
           <div className="container mx-auto flex gap-4 items-center">
-            <h1 className="text-5xl font-bold">LFJ</h1>
+            <Link href="/">
+              <h1 className="text-5xl font-bold">LFJ</h1>
+            </Link>
             <JobSwitcherContainer />
           </div>
         </header>

@@ -17,9 +17,7 @@ export function CreateJobButton() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="mx-auto mt-4" size="lg">
-          Create a job project
-        </Button>
+        <Button size="lg">Create a job project</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

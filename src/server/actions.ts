@@ -30,3 +30,11 @@ export async function createJobOffer(
 
   await db.insert(offer).values(data);
 }
+
+export async function editOffer(
+  offerId: number,
+  offerInfo: z.input<typeof insertJobOfferSchema>,
+) {
+  const data = insertJobOfferSchema.parse(offerInfo);
+  await db.update(offer).set(data).where(eq(offer.id, offerId));
+}

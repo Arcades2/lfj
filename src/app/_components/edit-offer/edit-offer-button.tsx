@@ -11,14 +11,14 @@ import React from 'react';
 import { Button } from '@/app/_components/ui/button';
 import { CiEdit } from 'react-icons/ci';
 import { type InferSelectModel } from 'drizzle-orm';
-import { type job } from '@/server/db/schema';
-import { EditJobForm } from './edit-job-form';
+import { type offer } from '@/server/db/schema';
+import { EditOfferForm } from './edit-offer-form';
 
-export type EditJobButtonProps = {
-  job: InferSelectModel<typeof job>;
+export type EditOfferButtonProps = {
+  offer: InferSelectModel<typeof offer>;
 };
 
-export function EditJobButton({ job }: EditJobButtonProps) {
+export function EditOfferButton({ offer }: EditOfferButtonProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -30,9 +30,9 @@ export function EditJobButton({ job }: EditJobButtonProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit job project</DialogTitle>
+          <DialogTitle>Edit your job offer</DialogTitle>
         </DialogHeader>
-        <EditJobForm job={job} afterUpdate={() => setIsOpen(false)} />
+        <EditOfferForm offer={offer} afterUpdate={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,7 @@
 'use client';
 
-import { insertJobOfferSchema } from '@/server/db/schema';
+import React from 'react';
+import { insertJobOfferSchema, type offer } from '@/server/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
@@ -22,7 +23,8 @@ import {
   SelectValue,
 } from '@/app/_components/ui/select';
 import { useRouter } from 'next/navigation';
-import { Calendar } from '@/app/_components/ui/calendar';
+import { type InferSelectModel } from 'drizzle-orm';
+import { editOffer } from '@/server/actions';
 import {
   Popover,
   PopoverContent,
@@ -31,39 +33,36 @@ import {
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { Textarea } from '@/app/_components/ui/textarea';
-import { createJobOffer } from '@/server/actions';
+import { Calendar } from '../ui/calendar';
+import { Textarea } from '../ui/textarea';
 
-export type CreateJobOfferFormProps = {
-  jobId: number;
-  afterCreate?: () => void;
+export type EditOfferFormProps = {
+  offer: InferSelectModel<typeof offer>;
+  afterUpdate?: () => void;
 };
 
-export function CreateJobOfferForm({
-  afterCreate,
-  jobId,
-}: CreateJobOfferFormProps) {
+export function EditOfferForm({ offer, afterUpdate }: EditOfferFormProps) {
   const router = useRouter();
   const form = useForm<z.input<typeof insertJobOfferSchema>>({
     resolver: zodResolver(insertJobOfferSchema),
     defaultValues: {
-      company: '',
-      foundOn: '',
-      jobId,
-      phone: '',
-      location: '',
-      salary: '',
-      salaryFrequency: 'yearly',
-      firstContactDate: new Date(),
-      notes: '',
-      declined: false,
+      company: offer.company,
+      foundOn: offer.foundOn ?? '',
+      jobId: offer.jobId,
+      phone: offer.phone ?? '',
+      location: offer.location ?? '',
+      salary: offer.salary ?? '',
+      salaryFrequency: offer.salaryFrequency ?? 'yearly',
+      firstContactDate: offer.firstContactDate ?? undefined,
+      notes: offer.notes ?? '',
+      declined: offer.declined ?? false,
     },
   });
 
   const onSubmit = async (values: z.input<typeof insertJobOfferSchema>) => {
-    await createJobOffer(values);
+    await editOffer(offer.id, values);
     router.refresh();
-    afterCreate?.();
+    afterUpdate?.();
   };
 
   return (
