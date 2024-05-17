@@ -12,6 +12,7 @@ import {
 import { eq } from 'drizzle-orm';
 import { type z } from 'zod';
 
+// Job
 export async function createJob(jobInfo: z.input<typeof insertJobSchema>) {
   const data = insertJobSchema.parse(jobInfo);
   await db.insert(job).values(data);
@@ -25,6 +26,7 @@ export async function editJob(
   await db.update(job).set(data).where(eq(job.id, jobId));
 }
 
+// Offer
 export async function createJobOffer(
   jobOfferInfo: z.input<typeof insertJobOfferSchema>,
 ) {
@@ -41,6 +43,11 @@ export async function editOffer(
   await db.update(offer).set(data).where(eq(offer.id, offerId));
 }
 
+export async function deleteOffer(offerId: number) {
+  await db.delete(offer).where(eq(offer.id, offerId));
+}
+
+// Follow Up
 export async function createFollowUp(
   followUpInfo: z.input<typeof insertFollowUpSchema>,
 ) {

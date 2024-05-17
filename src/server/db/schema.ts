@@ -194,7 +194,9 @@ export const followUp = createTable('follow_up', {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp('updatedAt', { withTimezone: true }),
-  offerId: integer('offer_id').notNull(),
+  offerId: integer('offer_id')
+    .references(() => offer.id, { onDelete: 'cascade' })
+    .notNull(),
 });
 
 export const insertFollowUpSchema = z.object({
