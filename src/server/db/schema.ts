@@ -185,7 +185,7 @@ export const jobRelations = relations(job, ({ many }) => ({
 export const followUp = createTable('follow_up', {
   id: serial('id').primaryKey(),
   date: timestamp('date', { withTimezone: true }).notNull(),
-  event_type: varchar('event_type', {
+  eventType: varchar('event_type', {
     length: 256,
     enum: ['phone', 'email', 'in-person', 'other'],
   }).notNull(),
@@ -195,6 +195,13 @@ export const followUp = createTable('follow_up', {
     .notNull(),
   updatedAt: timestamp('updatedAt', { withTimezone: true }),
   offerId: integer('offer_id').notNull(),
+});
+
+export const insertFollowUpSchema = z.object({
+  date: z.date(),
+  eventType: z.enum(['phone', 'email', 'in-person', 'other']),
+  details: z.string().min(1),
+  offerId: z.number().int(),
 });
 
 export const followUpRelations = relations(followUp, ({ one }) => ({

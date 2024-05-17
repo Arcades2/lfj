@@ -1,12 +1,12 @@
 import { db } from '@/server/db';
-import { CreateJobOfferButton } from '@/app/_components/create-job-offer';
-import { JobOffersList } from '@/app/_components/job-offers-list';
 import { EditOfferButton } from '@/app/_components/edit-offer';
+import { FollowUpTable } from '@/app/_components/follow-up-table';
+import { CreateFollowUpButton } from '@/app/_components/create-follow-up/create-follow-up-button';
 
 export default async function FollowUpsPage({
   params,
 }: {
-  params: { offerId: string; jobId: string };
+  params: { offerId: string };
 }) {
   const followUps = await db.query.followUp.findMany({
     where: (f, { eq }) => eq(f.offerId, Number(params.offerId)),
@@ -14,7 +14,7 @@ export default async function FollowUpsPage({
   });
 
   const offer = await db.query.offer.findFirst({
-    where: (j, { eq }) => eq(j.id, Number(params.jobId)),
+    where: (j, { eq }) => eq(j.id, Number(params.offerId)),
   });
 
   if (!offer) {
@@ -37,7 +37,10 @@ export default async function FollowUpsPage({
       </div>
       {offer.notes && <p className="italic">{offer.notes}</p>}
       <div className="h-0.5 bg-secondary w-full my-8" />
-      <div className="flex flex-col items-center gap-8" />
+      <div className="flex flex-col items-center gap-8">
+        <CreateFollowUpButton offerId={offer.id} />
+        <FollowUpTable followUps={followUps} />
+      </div>
     </main>
   );
 }
