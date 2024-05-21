@@ -29,7 +29,7 @@ export function FollowUpTable({ followUps }: FollowUpTableProps) {
       <TableBody>
         {followUps.map((followUp) => (
           <TableRow key={followUp.id}>
-            <TableCell>{format(followUp.date, 'dd-mm-yyyy')}</TableCell>
+            <TableCell>{format(followUp.date, 'dd/MM/yyyy')}</TableCell>
             <TableCell>{followUp.eventType}</TableCell>
             <TableCell>{followUp.details}</TableCell>
             <TableCell>

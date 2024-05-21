@@ -2,6 +2,7 @@ import { db } from '@/server/db';
 import { EditOfferButton } from '@/app/_components/edit-offer';
 import { FollowUpTable } from '@/app/_components/follow-up-table';
 import { CreateFollowUpButton } from '@/app/_components/create-follow-up/create-follow-up-button';
+import { CiPhone, CiSearch, CiStickyNote } from 'react-icons/ci';
 
 export default async function FollowUpsPage({
   params,
@@ -35,7 +36,21 @@ export default async function FollowUpsPage({
         </h1>
         <EditOfferButton offer={offer} />
       </div>
-      {offer.notes && <p className="italic">{offer.notes}</p>}
+      {offer.phone && (
+        <p className="flex gap-2 items-center">
+          <CiPhone /> {offer.phone}
+        </p>
+      )}
+      {offer.foundOn && (
+        <p className="flex gap-2 items-center">
+          <CiSearch /> {offer.foundOn}
+        </p>
+      )}
+      {offer.notes && (
+        <p className="flex gap-2 items-center">
+          <CiStickyNote /> {offer.notes}
+        </p>
+      )}
       <div className="h-0.5 bg-secondary w-full my-8" />
       <div className="flex flex-col items-center gap-8">
         <CreateFollowUpButton offerId={offer.id} />

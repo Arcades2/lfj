@@ -221,7 +221,7 @@ export function EditOfferForm({ offer, afterUpdate }: EditOfferFormProps) {
           )}
         />
         <Button type="submit" className="mt-4 ">
-          Create job offer
+          Edit job offer
         </Button>
       </form>
     </Form>
