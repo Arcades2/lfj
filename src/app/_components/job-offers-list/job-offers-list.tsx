@@ -8,7 +8,7 @@ export type JobOffersListProps = {
 export async function JobOffersList({ jobId }: JobOffersListProps) {
   const offers = await db.query.offer.findMany({
     where: (o, { eq }) => eq(o.jobId, jobId),
-    orderBy: (o, { desc }) => desc(o.createdAt),
+    orderBy: (o, { desc, asc }) => [asc(o.declined), desc(o.createdAt)],
   });
 
   return (

@@ -3,6 +3,7 @@ import { EditOfferButton } from '@/app/_components/edit-offer';
 import { FollowUpTable } from '@/app/_components/follow-up-table';
 import { CreateFollowUpButton } from '@/app/_components/create-follow-up/create-follow-up-button';
 import { CiPhone, CiSearch, CiStickyNote } from 'react-icons/ci';
+import { DeclinedOfferButton } from '@/app/_components/declined-offer-button';
 
 export default async function FollowUpsPage({
   params,
@@ -28,13 +29,16 @@ export default async function FollowUpsPage({
 
   return (
     <main className="container mx-auto min-h-[90vh] py-8">
-      <div className="flex items-center gap-2">
-        <h1 className="text-2xl">
-          {offer.company}
-          {offer.location ? ` | ${offer.location}` : ''}
-          {offer.salary ? ` | ${offer.salary}/${offer.salaryFrequency}` : ''}
-        </h1>
-        <EditOfferButton offer={offer} />
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl">
+            {offer.company}
+            {offer.location ? ` | ${offer.location}` : ''}
+            {offer.salary ? ` | ${offer.salary}/${offer.salaryFrequency}` : ''}
+          </h1>
+          <EditOfferButton offer={offer} />
+        </div>
+        {!offer.declined && <DeclinedOfferButton offerId={offer.id} />}
       </div>
       {offer.phone && (
         <p className="flex gap-2 items-center">

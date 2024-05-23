@@ -62,3 +62,7 @@ export async function editFollowUp(
   const data = insertFollowUpSchema.parse(followUpInfo);
   await db.update(followUp).set(data).where(eq(followUp.id, followUpId));
 }
+
+export async function declineOffer(offerId: number) {
+  await db.update(offer).set({ declined: true }).where(eq(offer.id, offerId));
+}
